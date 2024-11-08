@@ -77,8 +77,10 @@ jobs:
           cd temp
           unzip asset.zip
           rm *.zip
+          echo "temp ls"
+          ls -ltr
           cd ..
-          mv -v temp/$ASSET_NAME/* ./
+          mv -v "temp/$ASSET_NAME/*" ./
           rm -r temp
           ls -ltr
           #git config --local user.email "github-actions@users.noreply.github.com"
