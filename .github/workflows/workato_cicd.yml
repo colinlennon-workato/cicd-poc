@@ -51,6 +51,15 @@ jobs:
 
       - name: Download project/manifest and add to repositoy
         run: |
+          # Get project ID
+          quoted_asset_name="\"$ASSET_NAME\""
+          echo "Quoted asset name: $quoted_asset_name"
+          project_id=$(curl --location 'https://app.eu.workato.com/api/projects' \
+          --header 'Authorization: Bearer ${{ secrets.WORKATO_TOKEN }}' \
+          | jq '.[] | select(.name==$quoted_asset_name).id')
+          
+          echo "Project ID: $project_id"
+          
           # Build project and get build ID
           build_id=$(curl --request POST --location 'https://app.eu.workato.com/api/projects/348974/build' \
           --header 'Authorization: Bearer ${{ secrets.WORKATO_TOKEN }}' \
@@ -83,6 +92,9 @@ jobs:
           #git add .
           #git commit -m "unzip"
           #git push origin main
+        env:
+          ASSET_NAME: ${{ inputs.asset_name }}
+          
           
           
 
