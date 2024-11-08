@@ -1,0 +1,515 @@
+{
+  "name": "Log Workato User Details - Recipe Count",
+  "description": "",
+  "version": 7,
+  "private": true,
+  "concurrency": 1,
+  "code": {
+    "number": 0,
+    "provider": "clock",
+    "name": "scheduled_event",
+    "as": "454d6c06",
+    "title": null,
+    "description": "<span class=\"provider\">Trigger</span> every 5 minutes",
+    "keyword": "trigger",
+    "input": {
+      "time_unit": "minutes",
+      "trigger_every": "5"
+    },
+    "extended_input_schema": [
+      {
+        "control_type": "integer",
+        "default": "5",
+        "enforce_template_mode": true,
+        "extends_schema": true,
+        "hint": "Define repeating schedule. Enter whole numbers only.\n                        This field can be set to a minimum of 5 minutes.",
+        "label": "Trigger every",
+        "name": "trigger_every",
+        "optional": false,
+        "suffix": {
+          "text": "minutes"
+        },
+        "type": "string"
+      },
+      {
+        "control_type": "select",
+        "hint": "Select the timezone to use. Leave it blank to use <b>{{authUser.account_timezone}}</b>",
+        "label": "Timezone",
+        "name": "timezone",
+        "optional": true,
+        "pick_list": "timezone_id_global_pick_list",
+        "pick_list_connection_less": true,
+        "type": "string"
+      },
+      {
+        "control_type": "date_time",
+        "enforce_template_mode": true,
+        "extends_schema": true,
+        "hint": "Set date and time to start or leave blank to start immediately. <b>Once recipe has been run or tested, value cannot be changed.</b>",
+        "label": "Start after",
+        "name": "start_after",
+        "optional": true,
+        "parse_output": "date_time_conversion",
+        "since_field": true,
+        "type": "date_time",
+        "ignore_timezone": true,
+        "render_input": "date_time_conversion"
+      }
+    ],
+    "block": [
+      {
+        "number": 1,
+        "provider": "rest",
+        "name": "make_request_v2",
+        "as": "1c833272",
+        "title": "Get user",
+        "description": "<span class=\"provider\">Get user</span> via <span class=\"provider\">HTTP</span>",
+        "keyword": "action",
+        "toggleCfg": {
+          "response.ignore_http_errors": true
+        },
+        "input": {
+          "request_name": "Get user",
+          "request": {
+            "method": "GET",
+            "content_type": "application/json",
+            "url": "users/me"
+          },
+          "response": {
+            "output_type": "json",
+            "expected_encoding": "UTF-8",
+            "ignore_http_errors": "false",
+            "response_schema": "[{\"control_type\":\"number\",\"label\":\"ID\",\"parse_output\":\"float_conversion\",\"type\":\"number\",\"name\":\"id\"},{\"control_type\":\"text\",\"label\":\"Name\",\"type\":\"string\",\"name\":\"name\"},{\"control_type\":\"text\",\"label\":\"Created at\",\"render_input\":\"date_time_conversion\",\"parse_output\":\"date_time_conversion\",\"type\":\"date_time\",\"name\":\"created_at\"},{\"control_type\":\"text\",\"label\":\"Expert\",\"render_input\":{},\"parse_output\":{},\"toggle_hint\":\"Select from option list\",\"toggle_field\":{\"label\":\"Expert\",\"control_type\":\"text\",\"toggle_hint\":\"Use custom value\",\"type\":\"boolean\",\"name\":\"expert\"},\"type\":\"boolean\",\"name\":\"expert\"},{\"control_type\":\"text\",\"label\":\"Avatar URL\",\"type\":\"string\",\"name\":\"avatar_url\"},{\"control_type\":\"number\",\"label\":\"Recipes count\",\"parse_output\":\"float_conversion\",\"type\":\"number\",\"name\":\"recipes_count\"},{\"control_type\":\"text\",\"label\":\"Company name\",\"type\":\"string\",\"name\":\"company_name\"},{\"control_type\":\"text\",\"label\":\"Location\",\"type\":\"string\",\"name\":\"location\"},{\"control_type\":\"text\",\"label\":\"Last seen\",\"render_input\":\"date_time_conversion\",\"parse_output\":\"date_time_conversion\",\"type\":\"date_time\",\"name\":\"last_seen\"},{\"control_type\":\"text\",\"label\":\"Contact phone\",\"type\":\"string\",\"name\":\"contact_phone\"},{\"control_type\":\"text\",\"label\":\"Contact email\",\"type\":\"string\",\"name\":\"contact_email\"},{\"control_type\":\"text\",\"label\":\"Email\",\"type\":\"string\",\"name\":\"email\"},{\"control_type\":\"text\",\"label\":\"Phone\",\"type\":\"string\",\"name\":\"phone\"},{\"control_type\":\"number\",\"label\":\"Active recipes count\",\"parse_output\":\"float_conversion\",\"type\":\"number\",\"name\":\"active_recipes_count\"},{\"control_type\":\"number\",\"label\":\"Root folder ID\",\"parse_output\":\"float_conversion\",\"type\":\"number\",\"name\":\"root_folder_id\"},{\"control_type\":\"text\",\"label\":\"Plan ID\",\"type\":\"string\",\"name\":\"plan_id\"},{\"control_type\":\"text\",\"label\":\"Current billing period start\",\"render_input\":\"date_time_conversion\",\"parse_output\":\"date_time_conversion\",\"type\":\"date_time\",\"name\":\"current_billing_period_start\"},{\"control_type\":\"text\",\"label\":\"Current billing period end\",\"render_input\":\"date_time_conversion\",\"parse_output\":\"date_time_conversion\",\"type\":\"date_time\",\"name\":\"current_billing_period_end\"}]",
+            "headers_schema": "[{\"control_type\":\"text\",\"label\":\"Date\",\"render_input\":\"date_time_conversion\",\"parse_output\":\"date_time_conversion\",\"type\":\"date_time\",\"name\":\"date\"},{\"control_type\":\"text\",\"label\":\"Content type\",\"type\":\"string\",\"name\":\"content_type\"},{\"control_type\":\"text\",\"label\":\"Transfer encoding\",\"type\":\"string\",\"name\":\"transfer_encoding\"},{\"control_type\":\"text\",\"label\":\"Connection\",\"type\":\"string\",\"name\":\"connection\"},{\"control_type\":\"text\",\"label\":\"Server\",\"type\":\"string\",\"name\":\"server\"},{\"control_type\":\"text\",\"label\":\"Vary\",\"type\":\"string\",\"name\":\"vary\"},{\"control_type\":\"text\",\"label\":\"X frame options\",\"type\":\"string\",\"name\":\"x_frame_options\"},{\"control_type\":\"text\",\"label\":\"X xss protection\",\"type\":\"string\",\"name\":\"x_xss_protection\"},{\"control_type\":\"text\",\"label\":\"X content type options\",\"type\":\"string\",\"name\":\"x_content_type_options\"},{\"control_type\":\"text\",\"label\":\"X download options\",\"type\":\"string\",\"name\":\"x_download_options\"},{\"control_type\":\"text\",\"label\":\"X permitted cross domain policies\",\"type\":\"string\",\"name\":\"x_permitted_cross_domain_policies\"},{\"control_type\":\"text\",\"label\":\"Referrer policy\",\"type\":\"string\",\"name\":\"referrer_policy\"},{\"control_type\":\"text\",\"label\":\"Content security policy\",\"type\":\"string\",\"name\":\"content_security_policy\"},{\"control_type\":\"text\",\"label\":\"Permissions policy\",\"type\":\"string\",\"name\":\"permissions_policy\"},{\"control_type\":\"text\",\"label\":\"Cache control\",\"type\":\"string\",\"name\":\"cache_control\"},{\"control_type\":\"text\",\"label\":\"X workato version\",\"type\":\"string\",\"name\":\"x_workato_version\"},{\"control_type\":\"text\",\"label\":\"Etag\",\"type\":\"string\",\"name\":\"etag\"},{\"control_type\":\"text\",\"label\":\"X request ID\",\"type\":\"string\",\"name\":\"x_request_id\"},{\"control_type\":\"text\",\"label\":\"X runtime\",\"type\":\"string\",\"name\":\"x_runtime\"},{\"control_type\":\"text\",\"label\":\"X correlation ID\",\"type\":\"string\",\"name\":\"x_correlation_id\"},{\"control_type\":\"text\",\"label\":\"Strict transport security\",\"type\":\"string\",\"name\":\"strict_transport_security\"}]"
+          },
+          "wait_for_response": "false"
+        },
+        "extended_output_schema": [
+          {
+            "label": "Headers",
+            "name": "headers",
+            "properties": [
+              {
+                "control_type": "text",
+                "label": "Date",
+                "render_input": "date_time_conversion",
+                "parse_output": "date_time_conversion",
+                "type": "date_time",
+                "name": "date"
+              },
+              {
+                "control_type": "text",
+                "label": "Content type",
+                "type": "string",
+                "name": "content_type"
+              },
+              {
+                "control_type": "text",
+                "label": "Transfer encoding",
+                "type": "string",
+                "name": "transfer_encoding"
+              },
+              {
+                "control_type": "text",
+                "label": "Connection",
+                "type": "string",
+                "name": "connection"
+              },
+              {
+                "control_type": "text",
+                "label": "Server",
+                "type": "string",
+                "name": "server"
+              },
+              {
+                "control_type": "text",
+                "label": "Vary",
+                "type": "string",
+                "name": "vary"
+              },
+              {
+                "control_type": "text",
+                "label": "X frame options",
+                "type": "string",
+                "name": "x_frame_options"
+              },
+              {
+                "control_type": "text",
+                "label": "X xss protection",
+                "type": "string",
+                "name": "x_xss_protection"
+              },
+              {
+                "control_type": "text",
+                "label": "X content type options",
+                "type": "string",
+                "name": "x_content_type_options"
+              },
+              {
+                "control_type": "text",
+                "label": "X download options",
+                "type": "string",
+                "name": "x_download_options"
+              },
+              {
+                "control_type": "text",
+                "label": "X permitted cross domain policies",
+                "type": "string",
+                "name": "x_permitted_cross_domain_policies"
+              },
+              {
+                "control_type": "text",
+                "label": "Referrer policy",
+                "type": "string",
+                "name": "referrer_policy"
+              },
+              {
+                "control_type": "text",
+                "label": "Content security policy",
+                "type": "string",
+                "name": "content_security_policy"
+              },
+              {
+                "control_type": "text",
+                "label": "Permissions policy",
+                "type": "string",
+                "name": "permissions_policy"
+              },
+              {
+                "control_type": "text",
+                "label": "Cache control",
+                "type": "string",
+                "name": "cache_control"
+              },
+              {
+                "control_type": "text",
+                "label": "X workato version",
+                "type": "string",
+                "name": "x_workato_version"
+              },
+              {
+                "control_type": "text",
+                "label": "Etag",
+                "type": "string",
+                "name": "etag"
+              },
+              {
+                "control_type": "text",
+                "label": "X request ID",
+                "type": "string",
+                "name": "x_request_id"
+              },
+              {
+                "control_type": "text",
+                "label": "X runtime",
+                "type": "string",
+                "name": "x_runtime"
+              },
+              {
+                "control_type": "text",
+                "label": "X correlation ID",
+                "type": "string",
+                "name": "x_correlation_id"
+              },
+              {
+                "control_type": "text",
+                "label": "Strict transport security",
+                "type": "string",
+                "name": "strict_transport_security"
+              }
+            ],
+            "type": "object"
+          },
+          {
+            "label": "Response",
+            "name": "response",
+            "properties": [
+              {
+                "control_type": "number",
+                "label": "ID",
+                "parse_output": "float_conversion",
+                "type": "number",
+                "name": "id"
+              },
+              {
+                "control_type": "text",
+                "label": "Name",
+                "type": "string",
+                "name": "name"
+              },
+              {
+                "control_type": "text",
+                "label": "Created at",
+                "render_input": "date_time_conversion",
+                "parse_output": "date_time_conversion",
+                "type": "date_time",
+                "name": "created_at"
+              },
+              {
+                "control_type": "text",
+                "label": "Expert",
+                "render_input": {
+                },
+                "parse_output": {
+                },
+                "toggle_hint": "Select from option list",
+                "toggle_field": {
+                  "label": "Expert",
+                  "control_type": "text",
+                  "toggle_hint": "Use custom value",
+                  "type": "boolean",
+                  "name": "expert"
+                },
+                "type": "boolean",
+                "name": "expert"
+              },
+              {
+                "control_type": "text",
+                "label": "Avatar URL",
+                "type": "string",
+                "name": "avatar_url"
+              },
+              {
+                "control_type": "number",
+                "label": "Recipes count",
+                "parse_output": "float_conversion",
+                "type": "number",
+                "name": "recipes_count"
+              },
+              {
+                "control_type": "text",
+                "label": "Company name",
+                "type": "string",
+                "name": "company_name"
+              },
+              {
+                "control_type": "text",
+                "label": "Location",
+                "type": "string",
+                "name": "location"
+              },
+              {
+                "control_type": "text",
+                "label": "Last seen",
+                "render_input": "date_time_conversion",
+                "parse_output": "date_time_conversion",
+                "type": "date_time",
+                "name": "last_seen"
+              },
+              {
+                "control_type": "text",
+                "label": "Contact phone",
+                "type": "string",
+                "name": "contact_phone"
+              },
+              {
+                "control_type": "text",
+                "label": "Contact email",
+                "type": "string",
+                "name": "contact_email"
+              },
+              {
+                "control_type": "text",
+                "label": "Email",
+                "type": "string",
+                "name": "email"
+              },
+              {
+                "control_type": "text",
+                "label": "Phone",
+                "type": "string",
+                "name": "phone"
+              },
+              {
+                "control_type": "number",
+                "label": "Active recipes count",
+                "parse_output": "float_conversion",
+                "type": "number",
+                "name": "active_recipes_count"
+              },
+              {
+                "control_type": "number",
+                "label": "Root folder ID",
+                "parse_output": "float_conversion",
+                "type": "number",
+                "name": "root_folder_id"
+              },
+              {
+                "control_type": "text",
+                "label": "Plan ID",
+                "type": "string",
+                "name": "plan_id"
+              },
+              {
+                "control_type": "text",
+                "label": "Current billing period start",
+                "render_input": "date_time_conversion",
+                "parse_output": "date_time_conversion",
+                "type": "date_time",
+                "name": "current_billing_period_start"
+              },
+              {
+                "control_type": "text",
+                "label": "Current billing period end",
+                "render_input": "date_time_conversion",
+                "parse_output": "date_time_conversion",
+                "type": "date_time",
+                "name": "current_billing_period_end"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "extended_input_schema": [
+          {
+            "label": "Response",
+            "name": "response",
+            "override": true,
+            "properties": [
+              {
+                "control_type": "select",
+                "label": "Response content type",
+                "pick_list": [
+                  [
+                    "Text",
+                    "rawdatatxt"
+                  ],
+                  [
+                    "Binary",
+                    "rawdata"
+                  ],
+                  [
+                    "JSON",
+                    "json"
+                  ],
+                  [
+                    "XML",
+                    "xml2"
+                  ]
+                ],
+                "hint": "Select expected format of data response type, e.g. JSON or XML. <a href=\"https://docs.workato.com/developing-connectors/http.html#response-type\" target=\"_blank\">Learn more</a>",
+                "default": "json",
+                "extends_schema": true,
+                "type": "string",
+                "name": "output_type"
+              },
+              {
+                "control_type": "select",
+                "label": "Encoding",
+                "pick_list": "supported_encodings_without_binary_global_pick_list",
+                "pick_list_connection_less": true,
+                "optional": true,
+                "default": "UTF-8",
+                "hint": "Default encoding type is set to UTF-8, and typically doesn't need to be changed. <a href=\"https://docs.workato.com/developing-connectors/http.html#response-type\" target=\"_blank\">Learn more</a>",
+                "type": "string",
+                "name": "expected_encoding"
+              },
+              {
+                "control_type": "schema-designer",
+                "label": "Response schema",
+                "sample_data_type": "json_http",
+                "extends_schema": true,
+                "empty_schema_title": "Describe all fields in your response.",
+                "optional": true,
+                "sticky": true,
+                "type": "string",
+                "name": "response_schema"
+              },
+              {
+                "control_type": "schema-designer",
+                "label": "HTTP response headers",
+                "extends_schema": true,
+                "empty_schema_title": "Describe all the response headers",
+                "optional": true,
+                "sticky": true,
+                "type": "string",
+                "name": "headers_schema"
+              },
+              {
+                "control_type": "checkbox",
+                "label": "Mark non-2xx response codes as success?",
+                "render_input": {
+                },
+                "parse_output": {
+                },
+                "toggle_hint": "Select from option list",
+                "toggle_field": {
+                  "label": "Mark non-2xx response codes as success?",
+                  "control_type": "text",
+                  "toggle_hint": "Use custom value",
+                  "default": false,
+                  "hint": "If <b>yes</b>, non 2xx response codes returned will be marked as a successful action. If <b>no</b>, non 2xx response codes returned will be marked as an error.",
+                  "optional": true,
+                  "type": "boolean",
+                  "name": "ignore_http_errors"
+                },
+                "default": "false",
+                "hint": "If <b>yes</b>, non 2xx response codes returned will be marked as a successful action. If <b>no</b>, non 2xx response codes returned will be marked as an error.",
+                "optional": true,
+                "type": "boolean",
+                "name": "ignore_http_errors"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "comment": "Test comment 2",
+        "uuid": "6c3a9703-c7f3-4848-8956-14437f7ec5cb",
+        "wizardFinished": true
+      },
+      {
+        "number": 2,
+        "provider": "logger",
+        "name": "log_message",
+        "as": "0c29e619",
+        "title": null,
+        "description": "Log <span class=\"provider\">message</span> to <span class=\"provider\">Job report</span>",
+        "keyword": "action",
+        "input": {
+          "user_logs_enabled": "false",
+          "message": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"rest\",\"line\":\"1c833272\",\"path\":[\"response\",\"recipes_count\"]}')}"
+        },
+        "extended_input_schema": [
+          {
+            "control_type": "switch",
+            "default": false,
+            "disable_formula": true,
+            "extends_schema": true,
+            "hint": "                Send a copy of the message to Workato logs.\n                <a href=\"https://docs.workato.com/features/logging-service.html\" target=\"_blank\" class=\"ng-scope\">\n                  Learn more\n                </a>\n",
+            "label": "Send to Workato log service",
+            "name": "user_logs_enabled",
+            "optional": true,
+            "type": "string"
+          }
+        ],
+        "uuid": "872a2b4e-7df3-4607-bade-8dd4d1111587"
+      }
+    ],
+    "uuid": "4ead8397-cb70-415e-9d70-67a0ada4dbbf",
+    "unfinished": false
+  },
+  "config": [
+    {
+      "keyword": "application",
+      "provider": "clock",
+      "skip_validation": false,
+      "account_id": null
+    },
+    {
+      "keyword": "application",
+      "provider": "rest",
+      "skip_validation": false,
+      "account_id": {
+        "zip_name": "Automation Pro Training/workato_http_connector.connection.json",
+        "name": "Workato HTTP Connector",
+        "folder": "Automation Pro Training"
+      }
+    },
+    {
+      "keyword": "application",
+      "provider": "logger",
+      "skip_validation": false,
+      "account_id": null
+    }
+  ]
+}
