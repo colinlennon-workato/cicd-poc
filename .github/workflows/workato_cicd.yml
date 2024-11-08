@@ -52,11 +52,9 @@ jobs:
       - name: Download project/manifest and add to repositoy
         run: |
           # Get project ID
-          ASSET_NAME_QUOTES="\"$ASSET_NAME\""
-          echo "Quoted asset name: $quoted_asset_name"
           project_id=$(curl --location 'https://app.eu.workato.com/api/projects' \
           --header 'Authorization: Bearer ${{ secrets.WORKATO_TOKEN }}' \
-          | jq '.[] | select(.name=='$ASSET_NAME_QUOTES').id')
+          | jq --arg ASSET_NAME "$ASSET_NAME" '.[] | select(.name==$ASSET_NAME).id')
           
           echo "Project ID: $project_id"
           
