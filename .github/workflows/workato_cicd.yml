@@ -52,37 +52,32 @@ jobs:
       - name: Download project/manifest and add to repositoy
         run: |
           # Get project ID
-          project_id=$(curl --location 'https://app.eu.workato.com/api/projects' \
+          PROJECT_ID=$(curl --location 'https://app.eu.workato.com/api/projects' \
           --header 'Authorization: Bearer ${{ secrets.WORKATO_TOKEN }}' \
-          | jq --arg ASSET_NAME "$ASSET_NAME" '.[] | select(.name==$ASSET_NAME).id')
-          
+          | jq --arg ASSET_NAME "$ASSET_NAME" '.[] | select(.name==$ASSET_NAME).id')          
           echo "Project ID: $project_id"
           
           # Build project and get build ID
-          build_id=$(curl --request POST --location 'https://app.eu.workato.com/api/projects/348974/build' \
+          BUILD_ID=$(curl --request POST --location "https://app.eu.workato.com/api/projects/$PROJECT_ID/build" \
           --header 'Authorization: Bearer ${{ secrets.WORKATO_TOKEN }}' \
           -d '{"description": "GitHub Actions PoC", "include_tags": true}' | jq '.id')
-          echo "Build ID: $build_id"
+          echo "Build ID: $BUILD_ID"
 
           # Wait for build to complete
           sleep 10
           
           # Get download URL
-          download_url=$(curl --location "https://app.eu.workato.com/api/project_builds/$build_id" \
+          download_url=$(curl --location "https://app.eu.workato.com/api/project_builds/$BUILD_ID" \
           --header 'Authorization: Bearer ${{ secrets.WORKATO_TOKEN }}' | jq -r '.download_url')
           echo "Download URL: $download_url"
-          echo "PWD:"
-          pwd
-          curl -L $download_url > "asset.zip";
-          ls -ltr
-
+          curl -L $download_url > "asset.zip"
           mkdir temp
           mv asset.zip temp/asset.zip
           cd temp
           unzip asset.zip
           rm *.zip
           cd ..
-          mv temp/* .
+          mv temp/$ASSET_NAME/* .
           rm -r temp
           ls -ltr
           #git config --local user.email "github-actions@users.noreply.github.com"
