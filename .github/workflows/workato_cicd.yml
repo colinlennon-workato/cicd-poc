@@ -79,7 +79,10 @@ jobs:
           rm *.zip
           echo "temp ls"
           ls -ltr
-          cd ..
+          cd $ASSET_NAME
+          echo "$ASSET_NAME ls"
+          ls -ltr
+          cd ../..
           mv -v "temp/$ASSET_NAME/*" ./
           rm -r temp
           ls -ltr
