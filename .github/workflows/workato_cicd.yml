@@ -54,7 +54,7 @@ jobs:
         #  WORKATO_TOKEN: ${{ secrets.WORKATO_TOKEN }}
         run: |
           build_id=$(curl --request POST --location 'https://app.eu.workato.com/api/projects/450988/build' \
-          --header 'Authorization: Bearer ${{ secrets.WORKATO_TOKEN }}'
+          --header 'Authorization: Bearer ${{ secrets.WORKATO_TOKEN }}' \
           -d '{"description": "GitHub Actions PoC", "include_tags": true}' | jq '.id')
           echo "Build ID: $build_id"
           
