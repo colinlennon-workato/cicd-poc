@@ -63,7 +63,7 @@ jobs:
           sleep 10
           
           # Get download URL
-          download_url=$(curl --location 'https://app.eu.workato.com/api/project_builds/348974/$build_id' \
+          download_url=$(curl --location 'https://app.eu.workato.com/api/project_builds/$build_id' \
           --header 'Authorization: Bearer ${{ secrets.WORKATO_TOKEN }}' | jq '.download_url')
           echo "Download URL: $download_url"
           
