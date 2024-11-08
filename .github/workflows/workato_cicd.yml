@@ -50,9 +50,10 @@ jobs:
           echo test, and deploy your project.
 
       - name: Download project/manifest and add to repositoy
-        env:
-          WORKATO_TOKEN: ${{ secrets.WORKATO_TOKEN }}
+        #env:
+        #  WORKATO_TOKEN: ${{ secrets.WORKATO_TOKEN }}
         run: |
+          WORKATO_TOKEN="${{ secrets.WORKATO_TOKEN }}"
           curl --location 'https://app.eu.workato.com/api/projects' \
           --header 'Authorization: Bearer "$WORKATO_TOKEN"'
           echo test, and deploy your project.
