@@ -53,10 +53,19 @@ jobs:
         #env:
         #  WORKATO_TOKEN: ${{ secrets.WORKATO_TOKEN }}
         run: |
-          build_id=$(curl --request POST --location 'https://app.eu.workato.com/api/projects/450988/build' \
+          # Build project and get build ID
+          build_id=$(curl --request POST --location 'https://app.eu.workato.com/api/projects/348974/build' \
           --header 'Authorization: Bearer ${{ secrets.WORKATO_TOKEN }}' \
           -d '{"description": "GitHub Actions PoC", "include_tags": true}' | jq '.id')
           echo "Build ID: $build_id"
+
+          # Wait for build to complete
+          sleep 10
+          
+          # Get download URL
+          download_url=$(curl --location 'https://app.eu.workato.com/api/project_builds/348974/$build_id' \
+          --header 'Authorization: Bearer ${{ secrets.WORKATO_TOKEN }}' | jq '.download_url')
+          echo "Download URL: $download_url"
           
           
 
