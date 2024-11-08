@@ -53,7 +53,6 @@ jobs:
         #env:
         #  WORKATO_TOKEN: ${{ secrets.WORKATO_TOKEN }}
         run: |
-          WORKATO_TOKEN='${{ secrets.WORKATO_TOKEN }}'
           curl --location 'https://app.eu.workato.com/api/projects' \
-          --header 'Authorization: Bearer "$WORKATO_TOKEN"'
+          --header 'Authorization: Bearer ${{ secrets.WORKATO_TOKEN }}'
           echo test, and deploy your project.
