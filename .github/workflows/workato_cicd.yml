@@ -55,7 +55,7 @@ jobs:
           PROJECT_ID=$(curl --location 'https://app.eu.workato.com/api/projects' \
           --header 'Authorization: Bearer ${{ secrets.WORKATO_TOKEN }}' \
           | jq --arg ASSET_NAME "$ASSET_NAME" '.[] | select(.name==$ASSET_NAME).id')          
-          echo "Project ID: $project_id"
+          echo "Project ID: $PROJECT_ID"
           
           # Build project and get build ID
           BUILD_ID=$(curl --request POST --location "https://app.eu.workato.com/api/projects/$PROJECT_ID/build" \
@@ -77,7 +77,7 @@ jobs:
           unzip asset.zip
           rm *.zip
           cd ..
-          mv temp/$ASSET_NAME/* .
+          mv "temp/$ASSET_NAME/*" .
           rm -r temp
           ls -ltr
           #git config --local user.email "github-actions@users.noreply.github.com"
