@@ -71,13 +71,14 @@ jobs:
           --header 'Authorization: Bearer ${{ secrets.WORKATO_TOKEN }}' | jq -r '.download_url')
           echo "Download URL: $download_url"
           curl -L $download_url > "asset.zip"
+          
           mkdir temp
           mv asset.zip temp/asset.zip
           cd temp
           unzip asset.zip
           rm *.zip
           cd ..
-          mv "temp/$ASSET_NAME/*" .
+          mv -v temp/$ASSET_NAME/* ./
           rm -r temp
           ls -ltr
           #git config --local user.email "github-actions@users.noreply.github.com"
