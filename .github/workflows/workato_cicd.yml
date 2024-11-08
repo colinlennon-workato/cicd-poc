@@ -68,6 +68,21 @@ jobs:
           pwd
           curl -L $download_url > "asset.zip";
           ls -ltr
+
+          mkdir temp
+          mv asset.zip temp/asset.zip
+          cd temp
+          unzip asset.zip
+          rm *.zip
+          cd ..
+          mv temp/* .
+          rm -r temp
+          ls -ltr
+          #git config --local user.email "github-actions@users.noreply.github.com"
+          #git config --local user.name "github-actions"
+          #git add .
+          #git commit -m "unzip"
+          #git push origin main
           
           
 
