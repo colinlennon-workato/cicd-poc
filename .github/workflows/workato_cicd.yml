@@ -62,11 +62,11 @@ jobs:
           
           # Get download URL
           download_url=$(curl --location "https://app.eu.workato.com/api/project_builds/$build_id" \
-          --header 'Authorization: Bearer ${{ secrets.WORKATO_TOKEN }}' | jq '.download_url')
+          --header 'Authorization: Bearer ${{ secrets.WORKATO_TOKEN }}' | jq -r '.download_url')
           echo "Download URL: $download_url"
           echo "PWD:"
           pwd
-          curl -L "$download_url" > "asset.zip";
+          curl -L $download_url > "asset.zip";
           ls -ltr
           
           
